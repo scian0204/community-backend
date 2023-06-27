@@ -34,6 +34,7 @@ public class UserController {
     public Response<Object> logout(HttpSession session) {
         Response<Object> res = new Response<>();
         session.removeAttribute("userId");
+        session.removeAttribute("isAdmin");
         return res;
     }
 
@@ -46,6 +47,13 @@ public class UserController {
     public Response<Object> isLogin(HttpSession session) {
         Response<Object> res = new Response<>();
         res.setData(session.getAttribute("userId"));
+        return res;
+    }
+
+    @GetMapping("/isAdmin")
+    public Response<Object> isAdmin(HttpSession session) {
+        Response<Object> res = new Response<>();
+        res.setData(session.getAttribute("isAdmin"));
         return res;
     }
 
@@ -66,7 +74,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Response<String> login(@RequestBody Map<String, Object> userObj, HttpSession session) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public Response<UserResponse> login(@RequestBody Map<String, Object> userObj, HttpSession session) throws UnsupportedEncodingException, NoSuchAlgorithmException {
         return userService.login(userObj, session);
     }
 

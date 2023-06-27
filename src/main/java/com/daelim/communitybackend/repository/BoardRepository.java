@@ -15,11 +15,14 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     @Query(value = "SELECT b.boardId, b.boardName, COUNT(p.postId) AS count\n" +
             "FROM Board b\n" +
             "LEFT JOIN Post p ON b.boardId = p.boardId\n" +
+            "WHERE isAllowed=1\n" +
             "GROUP BY b.boardId, b.boardName\n" +
             "ORDER BY COUNT(p.postId) DESC limit 8;"
             , nativeQuery = true)
     List<Object> getBoardsByLank();
 
-    Optional<Board> findBoardByBoardName(String boardName);
-    Page<Board> findAllByBoardNameLikeIgnoreCaseOrUserIdLike(Pageable pageable, String boardName, String userId);
+    Optional<Board> findBoardByBoardNameAndIsAllowedTrue(String boardName);
+    Page<Board> findAllByIsAllowedIsTrueAndBoardNameLikeIgnoreCaseOrUserIdLike(Pageable pageable, String boardName, String userId);
+    Page<Board> findAllByIsAllowedIsTrue(Pageable pageable);
+    Page<Board> findAllByIsAllowedIsFalse(Pageable pageable);
 }

@@ -27,7 +27,7 @@ public class BoardService {
 
     public Response<Page<Board>> getBoardList(Pageable pageable) {
         Response<Page<Board>> res = new Response<>();
-        res.setData(boardRepository.findAll(pageable));
+        res.setData(boardRepository.findAllByIsAllowedIsTrue(pageable));
 
         return res;
     }
@@ -42,7 +42,7 @@ public class BoardService {
         Response<Board> res = new Response<>();
         Board board = objMpr.convertValue(boardObj, Board.class);
 
-        Optional<Board> boardOptional = boardRepository.findBoardByBoardName(board.getBoardName());
+        Optional<Board> boardOptional = boardRepository.findBoardByBoardNameAndIsAllowedTrue(board.getBoardName());
         if (boardOptional.isPresent()) {
             Error error = new Error();
             error.setErrorId(0);
@@ -63,7 +63,7 @@ public class BoardService {
             error.setErrorId(0);
             error.setMessage("로그인 상태가 아님");
         } else {
-            Boolean isAdmin = userRepository.findIsAdminByUserId(userId);
+            Boolean isAdmin = (boolean) session.getAttribute("isAdmin");
             if (!isAdmin) {
                 Error error = new Error();
                 error.setErrorId(1);
@@ -117,7 +117,15 @@ public class BoardService {
 
     public Response<Page<Board>> getListByLike(Pageable pageable, String query) {
         Response<Page<Board>> res = new Response<>();
-        Page<Board> boards = boardRepository.findAllByBoardNameLikeIgnoreCaseOrUserIdLike(pageable, query, query);
+        Page<Board> boards = boardRepository.findAllByIsAllowedIsTrueAndBoardNameLikeIgnoreCaseOrUserIdLike(pageable, query, query);
+        res.setData(boards);
+
+        return res;
+    }
+
+    public Response<Page<Board>> getListByNotAllowed(Pageable pageable) {
+        Response<Page<Board>> res = new Response<>();
+        Page<Board> boards = boardRepository.findAllByIsAllowedIsFalse(pageable);
         res.setData(boards);
 
         return res;

@@ -113,8 +113,8 @@ public class UserService {
     }
 
 
-    public Response<String> login(Map<String, Object> userObj, HttpSession session) throws UnsupportedEncodingException, NoSuchAlgorithmException {
-        Response<String> res = new Response<>();
+    public Response<UserResponse> login(Map<String, Object> userObj, HttpSession session) throws UnsupportedEncodingException, NoSuchAlgorithmException {
+        Response<UserResponse> res = new Response<>();
         Error error = new Error();
         LoginRequest loginRequest = objMpr.convertValue(userObj, LoginRequest.class);
         loginRequest.setPassword(encrypt(loginRequest.getPassword()));
@@ -129,8 +129,10 @@ public class UserService {
             error.setMessage("비밀번호가 다름");
             res.setError(error);
         } else {
+            User user = userOptional.get();
             session.setAttribute("userId", loginRequest.getUserId());
-            res.setData(loginRequest.getUserId());
+            session.setAttribute("isAdmin", user.getIsAdmin());
+            res.setData(new UserResponse(user));
         }
 
         return res;

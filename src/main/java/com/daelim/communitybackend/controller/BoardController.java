@@ -44,6 +44,11 @@ public class BoardController {
         return boardService.getListByLike(pageable, "%"+query+"%");
     }
 
+    @GetMapping("/notAllowedList")
+    public Response<Page<Board>>  getListByNotAllowed(@PageableDefault(page = 0, size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable) {
+        return boardService.getListByNotAllowed(pageable);
+    }
+
     @PostMapping("/apply")
     public Response<Board> applyBoard(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
