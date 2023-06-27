@@ -114,4 +114,12 @@ public class BoardService {
         res.setData(new BoardResponse(boardRepository.getReferenceById(boardId)));
         return res;
     }
+
+    public Response<Page<Board>> getListByLike(Pageable pageable, String query) {
+        Response<Page<Board>> res = new Response<>();
+        Page<Board> boards = boardRepository.findAllByBoardNameLikeIgnoreCaseOrUserIdLike(pageable, query, query);
+        res.setData(boards);
+
+        return res;
+    }
 }

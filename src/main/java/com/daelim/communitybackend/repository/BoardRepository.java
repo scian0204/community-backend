@@ -1,6 +1,8 @@
 package com.daelim.communitybackend.repository;
 
 import com.daelim.communitybackend.entity.Board;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +21,5 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     List<Object> getBoardsByLank();
 
     Optional<Board> findBoardByBoardName(String boardName);
+    Page<Board> findAllByBoardNameLikeIgnoreCaseOrUserIdLike(Pageable pageable, String boardName, String userId);
 }

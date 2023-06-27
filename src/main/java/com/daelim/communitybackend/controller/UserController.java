@@ -3,11 +3,16 @@ package com.daelim.communitybackend.controller;
 import com.daelim.communitybackend.dto.request.SignUpRequest;
 import com.daelim.communitybackend.dto.response.Response;
 import com.daelim.communitybackend.dto.response.UserResponse;
+import com.daelim.communitybackend.entity.User;
 import com.daelim.communitybackend.service.UserService;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
@@ -42,6 +47,11 @@ public class UserController {
         Response<Object> res = new Response<>();
         res.setData(session.getAttribute("userId"));
         return res;
+    }
+
+    @GetMapping("/listByLike/{query}")
+    public Response<Page<User>> getListByLike(@PageableDefault(page = 0, size = 10, sort = "userId", direction = Sort.Direction.DESC)Pageable pageable, @PathVariable String query) {
+        return userService.getListByLike(pageable, "%"+query+"%");
     }
 
     @PostMapping("/signUp")

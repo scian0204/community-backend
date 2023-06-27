@@ -39,6 +39,11 @@ public class BoardController {
         return boardService.getBoardByBoardId(boardId);
     }
 
+    @GetMapping("/listByLike/{query}")
+    public Response<Page<Board>> getListByLike(@PageableDefault(page = 0, size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable String query) {
+        return boardService.getListByLike(pageable, "%"+query+"%");
+    }
+
     @PostMapping("/apply")
     public Response<Board> applyBoard(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(

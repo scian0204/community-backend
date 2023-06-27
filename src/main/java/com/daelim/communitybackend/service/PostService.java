@@ -148,4 +148,12 @@ public class PostService {
 
         return res;
     }
+
+    public Response<Page<Post>> getListByLike(Pageable pageable, String query) {
+        Response<Page<Post>> res = new Response<>();
+        Page<Post> posts = postRepository.findAllByTitleLikeIgnoreCaseOrContentLikeIgnoreCaseOrUserIdLike(pageable, query, query, query);
+        res.setData(posts);
+
+        return res;
+    }
 }

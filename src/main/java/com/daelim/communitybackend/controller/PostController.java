@@ -43,6 +43,12 @@ public class PostController {
     public Response<PostResponse> recmdPost(@PathVariable Integer postId, HttpSession session) {
         return postService.recmdPost(postId, session);
     }
+
+    @GetMapping("/listByLike/{query}")
+    public Response<Page<Post>> getListByLike(@PageableDefault(page = 0, size = 10, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable String query) {
+        return postService.getListByLike(pageable, "%"+query+"%");
+    }
+
     @DeleteMapping("/recmd/{postId}")
     public Response<PostResponse> deRecmdPost(@PathVariable Integer postId, HttpSession session) {
         return postService.deRecmdPost(postId, session);

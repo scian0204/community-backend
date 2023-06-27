@@ -1,6 +1,8 @@
 package com.daelim.communitybackend.repository;
 
 import com.daelim.communitybackend.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -9,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, String> {
     @Query("select u.isAdmin from User AS u where u.userId= :userId")
     Boolean findIsAdminByUserId(String userId);
+
+    Page<User> findAllByUserIdLikeOrUserNameLikeIgnoreCase(Pageable pageable, String userId, String userName);
 }

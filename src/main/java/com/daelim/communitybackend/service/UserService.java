@@ -9,7 +9,10 @@ import com.daelim.communitybackend.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -155,5 +158,13 @@ public class UserService {
             sb.append(String.format("%02x", b));
         }
         return sb.toString();
+    }
+
+    public Response<Page<User>> getListByLike(Pageable pageable, String query) {
+        Response<Page<User>> res = new Response<>();
+        Page<User> users = userRepository.findAllByUserIdLikeOrUserNameLikeIgnoreCase(pageable, query, query);
+        res.setData(users);
+
+        return res;
     }
 }

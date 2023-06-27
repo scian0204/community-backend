@@ -49,7 +49,7 @@ public class CommentService {
 
     public Response<Comment> modifyComment(Map<String, Object> commentObj) {
         Comment comment = objMpr.convertValue(commentObj, Comment.class);
-        Optional<Comment> commentOptional = commentRepository.findById(comment.getPostId());
+        Optional<Comment> commentOptional = commentRepository.findById(comment.getCommentId());
         Response<Comment> res = new Response<>();
 
         if (commentOptional.isPresent()) {
