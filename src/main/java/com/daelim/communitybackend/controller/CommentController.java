@@ -1,7 +1,7 @@
 package com.daelim.communitybackend.controller;
 
 import com.daelim.communitybackend.dto.request.CommentWriteRequest;
-import com.daelim.communitybackend.dto.request.PostModifyRequest;
+import com.daelim.communitybackend.dto.request.CommentModifyRequest;
 import com.daelim.communitybackend.dto.response.Response;
 import com.daelim.communitybackend.entity.Comment;
 import com.daelim.communitybackend.service.CommentService;
@@ -24,7 +24,7 @@ public class CommentController {
     CommentService commentService;
 
     @GetMapping("/{postId}")
-    public Response<Page<Comment>> getCommentByPostId(@PageableDefault(page = 0, size = 10, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Integer postId) {
+    public Response<Page<Comment>> getCommentByPostId(@PageableDefault(page = 0, size = 10, sort = "commentId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Integer postId) {
         return commentService.getCommentByPostId(pageable, postId);
     }
 
@@ -43,7 +43,7 @@ public class CommentController {
     public Response<Comment> modifyComment(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @Content(
-                            schema = @Schema(implementation = PostModifyRequest.class)
+                            schema = @Schema(implementation = CommentModifyRequest.class)
                     )
             )
             @RequestBody Map<String, Object> commentObj) {
