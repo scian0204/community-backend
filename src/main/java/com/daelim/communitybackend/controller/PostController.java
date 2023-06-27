@@ -49,6 +49,17 @@ public class PostController {
         return postService.getListByLike(pageable, "%"+query+"%");
     }
 
+    @GetMapping("/recmdList")
+    public Response<Page<Post>> getListOrderByRecmd(@PageableDefault(page = 0, size = 10, sort = "viewCount", direction = Sort.Direction.DESC) Pageable pageable) {
+        return postService.getListOrderByRecmd(pageable);
+    }
+    @GetMapping("/recmdList/{boardId}")
+    public Response<Page<Post>> getListByBoardIdOrderByRecmd(@PageableDefault(page = 0, size = 10, sort = "viewCount", direction = Sort.Direction.DESC) Pageable pageable,
+                                                             @PathVariable Integer boardId
+                                                             ) {
+        return postService.getListByBoardIdOrderByRecmd(pageable, boardId);
+    }
+
     @DeleteMapping("/recmd/{postId}")
     public Response<PostResponse> deRecmdPost(@PathVariable Integer postId, HttpSession session) {
         return postService.deRecmdPost(postId, session);

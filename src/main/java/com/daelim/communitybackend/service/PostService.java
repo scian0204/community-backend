@@ -156,4 +156,20 @@ public class PostService {
 
         return res;
     }
+
+    public Response<Page<Post>> getListOrderByRecmd(Pageable pageable) {
+        Response<Page<Post>> res = new Response<>();
+        Page<Post> posts = postRepository.findAllByOrderByRecommendDesc(pageable);
+        res.setData(posts);
+
+        return res;
+    }
+
+    public Response<Page<Post>> getListByBoardIdOrderByRecmd(Pageable pageable, Integer boardId) {
+        Response<Page<Post>> res = new Response<>();
+        Page<Post> posts = postRepository.findAllByBoardIdOrderByRecommendDesc(pageable, boardId);
+        res.setData(posts);
+
+        return res;
+    }
 }
