@@ -1,5 +1,6 @@
 package com.daelim.communitybackend.controller;
 
+import com.daelim.communitybackend.dto.request.PostModifyRequest;
 import com.daelim.communitybackend.dto.request.PostWriteRequest;
 import com.daelim.communitybackend.dto.response.PostResponse;
 import com.daelim.communitybackend.dto.response.Response;
@@ -38,6 +39,15 @@ public class PostController {
         return postService.getPostByPostId(postId);
     }
 
+    @GetMapping("/recmd/{postId}")
+    public Response<PostResponse> recmdPost(@PathVariable Integer postId, HttpSession session) {
+        return postService.recmdPost(postId, session);
+    }
+    @DeleteMapping("/recmd/{postId}")
+    public Response<PostResponse> deRecmdPost(@PathVariable Integer postId, HttpSession session) {
+        return postService.deRecmdPost(postId, session);
+    }
+
     @PostMapping("/write")
     public Response<Post> writePost(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -47,6 +57,19 @@ public class PostController {
             )
             @RequestBody Map<String, Object> postObj) {
         return postService.writePost(postObj);
+    }
+
+    @PutMapping("/update")
+    public Response<Post> updatePost(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            schema = @Schema(implementation = PostModifyRequest.class)
+                    )
+            )
+            @RequestBody Map<String, Object> postObj,
+            HttpSession session
+    ) {
+        return postService.updatePost(postObj, session);
     }
 
     @DeleteMapping("/delete/{postId}")

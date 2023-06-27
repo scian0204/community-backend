@@ -4,9 +4,8 @@ import lombok.Data;
 
 @Data
 public class PostModifyRequest {
-    private Integer commentId;
     private Integer postId;
-    private String userId;
-    private Integer target;
-    private String comment;
+    private String title;
+    private String content;
+    private String image;
 }
