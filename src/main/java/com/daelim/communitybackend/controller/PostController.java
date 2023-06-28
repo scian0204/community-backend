@@ -60,6 +60,11 @@ public class PostController {
         return postService.getListByBoardIdOrderByRecmd(pageable, boardId);
     }
 
+    @GetMapping("/listByUser/{userId}")
+    public  Response<Page<Post>> getListByUser(@PageableDefault(page = 0, size = 10, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable String userId) {
+        return postService.getListByUser(pageable, userId);
+    }
+
     @DeleteMapping("/recmd/{postId}")
     public Response<PostResponse> deRecmdPost(@PathVariable Integer postId, HttpSession session) {
         return postService.deRecmdPost(postId, session);

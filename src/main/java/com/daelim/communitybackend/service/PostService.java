@@ -172,4 +172,12 @@ public class PostService {
 
         return res;
     }
+
+    public Response<Page<Post>> getListByUser(Pageable pageable, String userId) {
+        Response<Page<Post>> res = new Response<>();
+        Page<Post> posts = postRepository.findAllByUserId(pageable, userId);
+        res.setData(posts);
+
+        return res;
+    }
 }

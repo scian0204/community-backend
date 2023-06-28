@@ -1,5 +1,6 @@
 package com.daelim.communitybackend.service;
 
+import com.daelim.communitybackend.dto.request.BoardModifyRequest;
 import com.daelim.communitybackend.dto.response.BoardResponse;
 import com.daelim.communitybackend.dto.response.Error;
 import com.daelim.communitybackend.dto.response.Response;
@@ -79,16 +80,26 @@ public class BoardService {
         return res;
     }
 
-    public Response<Board> modifyBoard(Map<String, Object> boardObj) {
+    public Response<Board> modifyBoard(Map<String, Object> boardObj, HttpSession session) {
         Response<Board> res = new Response<>();
-        Board board = objMpr.convertValue(boardObj, Board.class);
-        Optional<Board> boardOptional = boardRepository.findById(board.getBoardId());
+        BoardModifyRequest boardModifyRequest = objMpr.convertValue(boardObj, BoardModifyRequest.class);
+        Optional<Board> boardOptional = boardRepository.findById(boardModifyRequest.getBoardId());
         if (boardOptional.isPresent()) {
-            res.setData(boardRepository.save(board));
+            Board board = boardOptional.get();
+            if (board.getUserId().equals(session.getAttribute("userId"))) {
+                board.setBoardName(boardModifyRequest.getBoardName());
+                board.setIsAllowed(false);
+                res.setData(boardRepository.save(board));
+            } else {
+                Error error = new Error();
+                error.setErrorId(1);
+                error.setMessage("해당 게시판을 제작한 유저와 다름");
+                res.setError(error);
+            }
         } else {
             Error error = new Error();
             error.setErrorId(0);
-            error.setMessage("해당 보드가 게시판이 없음");
+            error.setMessage("해당 아이디의 게시판이 없음");
             res.setError(error);
         }
 
@@ -126,6 +137,14 @@ public class BoardService {
     public Response<Page<Board>> getListByNotAllowed(Pageable pageable) {
         Response<Page<Board>> res = new Response<>();
         Page<Board> boards = boardRepository.findAllByIsAllowedIsFalse(pageable);
+        res.setData(boards);
+
+        return res;
+    }
+
+    public Response<Page<Board>> getListByUser(Pageable pageable, String userId) {
+        Response<Page<Board>> res = new Response<>();
+        Page<Board> boards = boardRepository.findAllByUserIdAndIsAllowedIsTrue(pageable, userId);
         res.setData(boards);
 
         return res;

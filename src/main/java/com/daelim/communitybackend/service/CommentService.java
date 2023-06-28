@@ -93,4 +93,12 @@ public class CommentService {
 
         return res;
     }
+
+    public Response<Page<Comment>> getListByUser(Pageable pageable, String userId) {
+        Response<Page<Comment>> res = new Response<>();
+        Page<Comment> comments = commentRepository.findAllByUserId(pageable, userId);
+        res.setData(comments);
+
+        return res;
+    }
 }

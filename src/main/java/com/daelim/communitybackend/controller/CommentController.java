@@ -24,8 +24,13 @@ public class CommentController {
     CommentService commentService;
 
     @GetMapping("/{postId}")
-    public Response<Page<Comment>> getCommentByPostId(@PageableDefault(page = 0, size = 10, sort = "commentId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable Integer postId) {
+    public Response<Page<Comment>> getCommentByPostId(@PageableDefault(page = 0, size = 10, sort = "commentId", direction = Sort.Direction.ASC) Pageable pageable, @PathVariable Integer postId) {
         return commentService.getCommentByPostId(pageable, postId);
+    }
+
+    @GetMapping("/listByUser/{userId}")
+    public Response<Page<Comment>> getListByUser(@PageableDefault(page = 0, size = 10, sort = "commentId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable String userId) {
+        return commentService.getListByUser(pageable, userId);
     }
 
     @PostMapping("/write")

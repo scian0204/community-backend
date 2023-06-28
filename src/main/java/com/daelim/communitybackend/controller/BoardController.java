@@ -1,6 +1,7 @@
 package com.daelim.communitybackend.controller;
 
 import com.daelim.communitybackend.dto.request.BoardApplyRequest;
+import com.daelim.communitybackend.dto.request.BoardModifyRequest;
 import com.daelim.communitybackend.dto.response.BoardResponse;
 import com.daelim.communitybackend.dto.response.Response;
 import com.daelim.communitybackend.entity.Board;
@@ -49,6 +50,11 @@ public class BoardController {
         return boardService.getListByNotAllowed(pageable);
     }
 
+    @GetMapping("/listByUser/{userId}")
+    public Response<Page<Board>>  getListByUser(@PageableDefault(page = 0, size = 10, sort = "boardId", direction = Sort.Direction.DESC) Pageable pageable, @PathVariable String userId) {
+        return boardService.getListByUser(pageable, userId);
+    }
+
     @PostMapping("/apply")
     public Response<Board> applyBoard(
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -66,8 +72,16 @@ public class BoardController {
     }
 
     @PutMapping("/modify")
-    public Response<Board> modifyBoard(@RequestBody Map<String, Object> boardObj) {
-        return boardService.modifyBoard(boardObj);
+    public Response<Board> modifyBoard(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @Content(
+                            schema = @Schema(implementation = BoardModifyRequest.class)
+                    )
+            )
+            @RequestBody Map<String, Object> boardObj,
+            HttpSession session
+    ) {
+        return boardService.modifyBoard(boardObj, session);
     }
 
     @DeleteMapping("/delete/{boardId}")

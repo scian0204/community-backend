@@ -25,4 +25,5 @@ public interface BoardRepository extends JpaRepository<Board, Integer> {
     Page<Board> findAllByIsAllowedIsTrueAndBoardNameLikeIgnoreCaseOrUserIdLike(Pageable pageable, String boardName, String userId);
     Page<Board> findAllByIsAllowedIsTrue(Pageable pageable);
     Page<Board> findAllByIsAllowedIsFalse(Pageable pageable);
+    Page<Board> findAllByUserIdAndIsAllowedIsTrue(Pageable pageable, String userId);
 }

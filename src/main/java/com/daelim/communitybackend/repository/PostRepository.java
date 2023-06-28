@@ -13,4 +13,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     Page<Post> findAllByOrderByRecommendDesc(Pageable pageable);
     Page<Post> findAllByBoardIdOrderByRecommendDesc(Pageable pageable, Integer boardId);
+    Page<Post> findAllByUserId(Pageable pageable, String userId);
 }
