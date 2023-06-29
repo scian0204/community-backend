@@ -22,4 +22,5 @@ public class GuestBoard {
     private String userId;
     private String content;
     private Timestamp writeDate;
+    private String target;
 }
